@@ -54,14 +54,31 @@ export async function createApp({ testMode = false } = {}) {
     const corsConfig = process.env.NODE_ENV === 'production' 
         ? {
             origin: apiOriginChecker,
-            credentials: true
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['*'],
+            exposedHeaders: ['*']
           }
         : {
             origin: true,  // Allow all origins in development
-            credentials: true
+            credentials: true,
+            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            allowedHeaders: ['*'],
+            exposedHeaders: ['*']
           };
     
     await app.register(cors, corsConfig);
+
+    // Add additional hook to ensure CORS headers are always present
+    app.addHook('onSend', async (request, reply) => {
+        // Set explicit CORS headers for all responses
+        const origin = request.headers.origin || '*';
+        reply.header('Access-Control-Allow-Origin', origin);
+        reply.header('Access-Control-Allow-Credentials', 'true');
+        reply.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+        reply.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+        reply.header('Access-Control-Expose-Headers', 'Content-Length, Content-Type');
+    });
 
     await registerCollectRoute(app);
     await registerLiveWsRoute(app);

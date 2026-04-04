@@ -30,6 +30,11 @@ function normalizeIp(ip) {
 }
 
 export async function registerCollectRoute(fastify) {
+    // Handle preflight requests for /collect
+    fastify.options('/collect', async (request, reply) => {
+        return reply.code(204).send();
+    });
+
     fastify.post(
         '/collect',
         {
