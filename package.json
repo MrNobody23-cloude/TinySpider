@@ -4,24 +4,14 @@
     "version": "0.1.0",
     "description": "High-performance, self-hosted analytics platform",
     "workspaces": [
-        "frontend/packages/*",
-        "backend/packages/*"
+        "frontend",
+        "backend"
     ],
     "scripts": {
-        "install:all": "npm install",
-        "dev": "npm run dev:frontend & npm run dev:backend",
-        "dev:frontend": "npm --workspace @insight-os/dashboard run dev",
-        "dev:backend": "npm --workspace @insight-os/api run start",
-        "dev:demo": "npm --workspace @insight-os/demo-site run dev",
-        "build:all": "npm run build:frontend && npm run build:tracker",
-        "build:frontend": "npm --workspace @insight-os/dashboard run build",
-        "build:backend": "echo 'Backend (API) does not require a build step - it runs directly with Node.js'",
-        "build:tracker": "npm --workspace @insight-os/tracker run build",
-        "test:all": "npm run build:tracker && npm --workspace @insight-os/api run test && npm --workspace @insight-os/dashboard run test",
-        "test:watch": "vitest",
-        "test:api": "npm --workspace @insight-os/api run test",
-        "test:dashboard": "npm --workspace @insight-os/dashboard run test",
-        "start:backend": "npm --workspace @insight-os/api run start",
+        "install:all": "npm install && npm --prefix backend install && npm --prefix frontend install",
+        "dev": "npm run dev:backend & npm run dev:frontend",
+        "dev:backend": "cd backend && node server.js",
+        "dev:frontend": "cd frontend && npm run dev",
         "start:docker": "docker-compose up -d",
         "stop:docker": "docker-compose down",
         "logs:docker": "docker-compose logs -f"

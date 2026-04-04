@@ -1,0 +1,11 @@
+{
+  "name": "insight-os-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx -y concurrently \"npx serve . -p 8080\" \"npx serve demo-site -p 8081\""
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

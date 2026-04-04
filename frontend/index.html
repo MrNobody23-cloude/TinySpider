@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Insight-OS — Privacy-first, self-hosted web analytics dashboard with real-time tracking.">
+    <title>Insight-OS — Analytics Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://unpkg.com/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Apply saved theme before paint (prevents flash)
+        (function() {
+            const t = localStorage.getItem('ios-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+</head>
+<body>
+
+    <div class="mesh-bg" aria-hidden="true"></div>
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="header" id="top-header">
+        <div class="header-inner">
+            <a href="#" class="logo" aria-label="Insight-OS Home">
+                <span class="logo-mark">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="8" fill="url(#logoGrad)"/>
+                        <path d="M7 18 L11 12 L15 15 L19 9" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="19" cy="9" r="2" fill="white"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28">
+                                <stop offset="0%" stop-color="#7c3aed"/>
+                                <stop offset="100%" stop-color="#06b6d4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </span>
+                <span class="logo-text">Insight<span class="logo-accent">OS</span></span>
+            </a>
+
+            <nav class="top-nav" role="navigation" aria-label="Primary navigation">
+                <button class="top-nav-btn active" data-tab="overview" id="nav-overview">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Overview
+                </button>
+                <button class="top-nav-btn" data-tab="realtime" id="nav-realtime">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                    Real-time
+                </button>
+                <button class="top-nav-btn" data-tab="funnels" id="nav-funnels">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    Funnels
+                </button>
+                <button class="top-nav-btn" data-tab="heatmaps" id="nav-heatmaps">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+                    Heatmaps
+                </button>
+                <button class="top-nav-btn" data-tab="referrers" id="nav-referrers">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Referrers
+                </button>
+                <button class="top-nav-btn" data-tab="bots" id="nav-bots">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+                    Bots
+                </button>
+            </nav>
+
+            <div class="header-right">
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    <span id="realTimeCount">—</span>&nbsp;Live
+                </div>
+                <div class="header-kpis">
+                    <div class="kpi">
+                        <span class="kpi-val" id="totalVisitors">—</span>
+                        <span class="kpi-lbl">Visitors</span>
+                    </div>
+                    <div class="kpi-sep"></div>
+                    <div class="kpi">
+                        <span class="kpi-val" id="bounceRate">—</span>
+                        <span class="kpi-lbl">Bounce</span>
+                    </div>
+                </div>
+                <button class="theme-btn" id="themeToggleBtn" title="Toggle light/dark mode" aria-label="Toggle theme">
+                    <svg class="icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <svg class="icon-sun"  width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══ MAIN ═══ -->
+    <main class="page-body" role="main">
+
+        <!-- ── OVERVIEW ── -->
+        <section id="overview" class="tab-panel active" aria-labelledby="nav-overview">
+
+            <!-- KPI Strip — populated by JS from /api/overview -->
+            <div class="kpi-strip">
+                <div class="kpi-card" data-color="violet">
+                    <div class="kpi-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div>
+                        <div class="kpi-card-val" id="kpi-visitors">—</div>
+                        <div class="kpi-card-lbl">Unique Visitors</div>
+                    </div>
+                </div>
+                <div class="kpi-card" data-color="cyan">
+                    <div class="kpi-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    </div>
+                    <div>
+                        <div class="kpi-card-val" id="kpi-pageviews">—</div>
+                        <div class="kpi-card-lbl">Page Views</div>
+                    </div>
+                </div>
+                <div class="kpi-card" data-color="emerald">
+                    <div class="kpi-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div>
+                        <div class="kpi-card-val" id="kpi-session">—</div>
+                        <div class="kpi-card-lbl">Avg. Session</div>
+                    </div>
+                </div>
+                <div class="kpi-card" data-color="rose">
+                    <div class="kpi-card-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                    </div>
+                    <div>
+                        <div class="kpi-card-val" id="kpi-bounce">—</div>
+                        <div class="kpi-card-lbl">Bounce Rate</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Grid -->
+            <div class="bento-grid">
+                <div class="bento-card bento-wide" id="card-traffic">
+                    <div class="card-header">
+                        <h3>Traffic Over Time</h3>
+                        <div class="card-badge">Last 14 days</div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                </div>
+                <div class="bento-card" id="card-pages">
+                    <div class="card-header">
+                        <h3>Top Pages</h3>
+                        <div class="card-badge">All time</div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="pagesChart"></canvas>
+                    </div>
+                </div>
+                <div class="bento-card bento-full" id="card-map">
+                    <div class="card-header">
+                        <h3>Live Pulse Map</h3>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span> Live
+                        </div>
+                    </div>
+                    <div class="world-map" id="worldMap">
+                        <div class="map-grid"></div>
+                        <div class="map-blobs" id="mapBlobs"></div>
+                        <div class="map-empty">Awaiting visitor events…</div>
+                        <div class="map-label">Activity blobs appear when visitors land on your demo site</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── REAL-TIME ── -->
+        <section id="realtime" class="tab-panel" aria-labelledby="nav-realtime">
+            <div class="section-hero">
+                <h2>Live Analytics</h2>
+                <p>Real events from your demo site — updated every 2 seconds.</p>
+            </div>
+            <div class="bento-grid">
+                <div class="bento-card bento-wide">
+                    <div class="card-header">
+                        <h3>Page Views — Last 60 seconds</h3>
+                        <div class="live-indicator"><span class="live-dot"></span> Streaming</div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="realtimeChart"></canvas>
+                    </div>
+                </div>
+                <div class="bento-card">
+                    <div class="card-header">
+                        <h3>Active Sessions</h3>
+                    </div>
+                    <div id="sessionList" class="session-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── FUNNELS ── -->
+        <section id="funnels" class="tab-panel" aria-labelledby="nav-funnels">
+            <div class="section-hero">
+                <h2>Conversion Funnels</h2>
+                <p>See where visitors drop off using real page-view data from your site.</p>
+            </div>
+            <div class="funnel-editor card-panel">
+                <h3>Define Funnel Steps</h3>
+                <div class="funnel-steps">
+                    <div class="funnel-step-wrap">
+                        <span class="step-num">1</span>
+                        <input type="text" class="funnel-step" placeholder="/" value="/" aria-label="Step 1">
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="funnel-step-wrap">
+                        <span class="step-num">2</span>
+                        <input type="text" class="funnel-step" placeholder="/pricing" value="/pricing" aria-label="Step 2">
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="funnel-step-wrap">
+                        <span class="step-num">3</span>
+                        <input type="text" class="funnel-step" placeholder="/checkout" value="/checkout" aria-label="Step 3">
+                    </div>
+                </div>
+                <button id="analyzeFunnel" class="primary-btn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Analyze Funnel
+                </button>
+            </div>
+            <div class="bento-card bento-full">
+                <div class="card-header"><h3>Funnel Visualization</h3></div>
+                <div class="chart-wrap chart-wrap-lg">
+                    <canvas id="funnelChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── HEATMAPS ── -->
+        <section id="heatmaps" class="tab-panel" aria-labelledby="nav-heatmaps">
+            <div class="section-hero" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h2>Click Heatmaps</h2>
+                    <p>Live visualization of user clicks overlaid on your demo site.</p>
+                </div>
+                <!-- Page selector for heatmap -->
+                <div class="heatmap-controls" style="display:flex; gap: 1rem; align-items:center;">
+                    <label for="heatmapPageSelect" style="color:var(--text-2); font-weight:500;">Page</label>
+                    <select id="heatmapPageSelect" style="padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: var(--surface-bg); color: var(--text-1); outline: none;">
+                        <option value="/">/ (Home)</option>
+                        <option value="/pricing">/pricing</option>
+                        <option value="/checkout">/checkout</option>
+                        <option value="/about">/about</option>
+                    </select>
+                    <button id="refreshHeatmapBtn" class="primary-btn" style="padding:0.5rem 1rem;">
+                        ↺ Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="bento-card bento-full" style="padding: 0; overflow: auto; height: 75vh; max-height: 820px; border-radius: var(--radius); position: relative;">
+                <!-- Full-page inner wrapper — sized to real page dimensions via JS -->
+                <div id="heatmapInner" style="position: relative; width: 1280px; height: 3400px;">
+                    <!-- iframe at real page dimensions (no scaling) so coordinates are 1:1 -->
+                    <iframe 
+                        id="heatmapIframe"
+                        src="http://localhost:8081"
+                        style="width:1280px; height:3400px; border:none; display:block;"
+                        title="Demo site heatmap preview"
+                        scrolling="no"
+                    ></iframe>
+                    <!-- Canvas at exactly the same dimensions -->
+                    <canvas 
+                        id="heatmapCanvas"
+                        style="position:absolute; top:0; left:0; width:1280px; height:3400px; pointer-events:none; z-index:10;"
+                    ></canvas>
+                </div>
+                <!-- Sticky label -->
+                <div style="position:sticky; bottom:0; left:0; right:0; z-index:20; background:rgba(0,0,0,0.70); color:#94a3b8; font-size:0.72rem; padding:0.4rem 1rem; backdrop-filter:blur(8px); text-align:center;">
+                    🔥 Heatmap overlay — scroll &amp; click on the demo site above to record events
+                </div>
+            </div>
+        </section>
+
+        <!-- ── BOT DETECTION ── -->
+        <section id="bots" class="tab-panel" aria-labelledby="nav-bots">
+            <div class="section-hero">
+                <h2>Bot Intelligence</h2>
+                <p>Heuristic-based detection of automated traffic and crawlers.</p>
+            </div>
+            <div class="kpi-strip">
+                <div class="kpi-card" data-color="rose">
+                    <div class="kpi-card-icon">🤖</div>
+                    <div>
+                        <div class="kpi-card-val" id="bot-count">—</div>
+                        <div class="kpi-card-lbl">Known Bots</div>
+                    </div>
+                </div>
+                <div class="kpi-card" data-color="amber">
+                    <div class="kpi-card-icon">⚠️</div>
+                    <div>
+                        <div class="kpi-card-val" id="suspicious-count">—</div>
+                        <div class="kpi-card-lbl">Suspicious</div>
+                    </div>
+                </div>
+                <div class="kpi-card" data-color="emerald">
+                    <div class="kpi-card-icon">👤</div>
+                    <div>
+                        <div class="kpi-card-val" id="human-count">—</div>
+                        <div class="kpi-card-lbl">Verified Human</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bento-card bento-full">
+                <div class="card-header">
+                    <h3>Top Suspicious Sessions</h3>
+                    <div class="card-badge">Risk Analysis</div>
+                </div>
+                <div class="session-list" id="botSessionList" style="max-height: 500px;">
+                    <!-- Bot sessions populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ── REFERRERS ── -->
+        <section id="referrers" class="tab-panel" aria-labelledby="nav-referrers">
+            <div class="section-hero">
+                <h2>Traffic Sources</h2>
+                <p>Where are your visitors coming from? Based on real referrer headers.</p>
+            </div>
+            <div class="bento-grid">
+                <div class="bento-card bento-wide">
+                    <div class="card-header"><h3>Top Referrers</h3><div class="card-badge">All time</div></div>
+                    <div class="chart-wrap">
+                        <canvas id="referrersChart"></canvas>
+                    </div>
+                </div>
+                <div class="bento-card">
+                    <div class="card-header"><h3>Tracker Snippet</h3></div>
+                    <div class="snippet-box">
+                        <div class="snippet-label">Add this to any page you own:</div>
+                        <pre class="snippet-code"><code>&lt;script
+  src="http://localhost:3001/tracker.js"
+  defer&gt;
+&lt;/script&gt;</code></pre>
+                        <button class="primary-btn" style="margin-top:1rem;width:100%" onclick="copySnippet()">
+                            Copy Snippet
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        function copySnippet() {
+            const code = `<script src="http://localhost:3001/tracker.js" defer><\/script>`;
+            navigator.clipboard.writeText(code).then(() => alert('Snippet copied!'));
+        }
+    </script>
+</body>
+</html>

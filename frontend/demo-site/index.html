@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lumina — A beautiful demo product website tracked by Insight-OS analytics.">
+    <title>Lumina — Demo Website</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ✅ Insight-OS Tracker — embed this one line on any page you own -->
+    <script src="http://localhost:3001/tracker.js" defer></script>
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg:       #07090f;
+            --surface:  rgba(255,255,255,0.04);
+            --border:   rgba(255,255,255,0.08);
+            --text:     #f1f5f9;
+            --text-2:   #94a3b8;
+            --violet:   #7c3aed;
+            --cyan:     #06b6d4;
+            --emerald:  #10b981;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Mesh gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse 60% 50% at 20% 15%, rgba(124,58,237,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 45% at 80% 75%, rgba(6,182,212,0.14) 0%, transparent 60%);
+        }
+
+        /* ── NAVBAR ── */
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 3rem;
+            background: rgba(7,9,15,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
+        .nav-logo span { background: linear-gradient(135deg,#7c3aed,#06b6d4); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text-2); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-cta { background: linear-gradient(135deg,#7c3aed,#06b6d4); color: #fff; border: none; padding: 0.6rem 1.4rem; border-radius: 8px; font-family: 'Outfit',sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: opacity 0.2s; }
+        .nav-cta:hover { opacity: 0.85; }
+
+        /* ── HERO ── */
+        .hero {
+            max-width: 900px; margin: 0 auto;
+            padding: 7rem 2rem 5rem;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(124,58,237,0.12); border: 1px solid rgba(124,58,237,0.25);
+            color: #a78bfa; padding: 0.4rem 1rem; border-radius: 999px;
+            font-size: 0.82rem; font-weight: 600; margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900; line-height: 1.1;
+            letter-spacing: -0.04em; margin-bottom: 1.5rem;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg,#7c3aed,#06b6d4,#10b981);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.2rem; color: var(--text-2);
+            max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7;
+        }
+        .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-primary { background: linear-gradient(135deg,#7c3aed,#06b6d4); color:#fff; border:none; padding:0.85rem 2rem; border-radius:10px; font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem; cursor:pointer; transition:all 0.2s; box-shadow:0 6px 24px rgba(124,58,237,0.35); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow:0 10px 30px rgba(124,58,237,0.45); }
+        .btn-secondary { background:var(--surface); border:1px solid var(--border); color:var(--text); padding:0.85rem 2rem; border-radius:10px; font-family:'Outfit',sans-serif; font-weight:600; font-size:1rem; cursor:pointer; transition:all 0.2s; }
+        .btn-secondary:hover { background:rgba(255,255,255,0.08); }
+
+        /* ── FEATURES ── */
+        .features {
+            max-width: 1200px; margin: 0 auto;
+            padding: 5rem 2rem; display: grid;
+            grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+        }
+        @media(max-width:768px) { .features { grid-template-columns: 1fr; } }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); }
+        .feature-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; margin-bottom: 1.25rem;
+        }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+        .feature-card p { color: var(--text-2); font-size: 0.9rem; line-height: 1.6; }
+
+        /* ── PRICING ── */
+        .pricing { max-width: 900px; margin: 0 auto; padding: 5rem 2rem; text-align: center; }
+        .section-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+        .section-subtitle { color: var(--text-2); font-size: 1rem; margin-bottom: 3rem; }
+
+        .pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+        @media(max-width:640px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+        .pricing-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 20px; padding: 2rem;
+            position: relative; text-align: left;
+        }
+        .pricing-card.featured {
+            border-color: rgba(124,58,237,0.5);
+            background: rgba(124,58,237,0.08);
+        }
+        .pricing-badge {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg,#7c3aed,#06b6d4);
+            color:#fff; font-size:0.72rem; font-weight:700;
+            padding:0.25rem 0.9rem; border-radius:999px; white-space:nowrap;
+        }
+        .pricing-name { font-size:0.85rem; font-weight:600; color:var(--text-2); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.75rem; }
+        .pricing-price { font-size:2.5rem; font-weight:900; letter-spacing:-0.04em; margin-bottom:1.5rem; }
+        .pricing-price span { font-size:1rem; font-weight:400; color:var(--text-2); }
+        .pricing-features { list-style:none; display:flex; flex-direction:column; gap:0.65rem; margin-bottom:2rem; }
+        .pricing-features li { font-size:0.9rem; color:var(--text-2); display:flex; gap:0.5rem; }
+        .pricing-features li::before { content:'✓'; color:var(--emerald); font-weight:700; flex-shrink:0; }
+
+        /* ── CTA SECTION ── */
+        .cta-section {
+            max-width: 700px; margin: 2rem auto 8rem;
+            text-align: center; padding: 0 2rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            text-align: center; padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-2); font-size: 0.85rem;
+        }
+        footer a { color: #a78bfa; text-decoration: none; }
+
+        /* ── PAGE LINKS (for testing multi-page tracking) ── */
+        .page-links {
+            display: flex; gap: 1rem; justify-content: center;
+            flex-wrap: wrap; margin: 2rem auto;
+            max-width: 600px; padding: 0 2rem;
+        }
+        .page-link {
+            background: var(--surface); border: 1px solid var(--border);
+            color: var(--text-2); text-decoration: none; padding: 0.5rem 1rem;
+            border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+            transition: all 0.2s;
+        }
+        .page-link:hover { color: var(--text); border-color: var(--border); background: rgba(255,255,255,0.08); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-logo"><span>Lumina</span></div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#pricing" class="nav-cta">Get Started</a>
+    </nav>
+
+    <!-- Page navigation for testing — click these to simulate multi-page tracking -->
+    <div class="page-links">
+        <span style="font-size:0.78rem;color:#475569;align-self:center;">🧪 Test pages:</span>
+        <a href="/" class="page-link">/ Home</a>
+        <a href="/pricing" class="page-link">/pricing</a>
+        <a href="/docs" class="page-link">/docs</a>
+        <a href="/about" class="page-link">/about</a>
+        <a href="/checkout" class="page-link">/checkout</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-badge">✨ Now in public beta</div>
+        <h1>Build smarter<br><span>products, faster</span></h1>
+        <p>Lumina gives your team the workflows, insights, and tools to ship great products without the complexity.</p>
+        <div class="hero-btns">
+            <button class="btn-primary" onclick="alert('Demo: Sign up flow would go here')">Start for free</button>
+            <button class="btn-secondary" onclick="window.location.href='#features'">See how it works</button>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(124,58,237,0.15)">🚀</div>
+            <h3>Blazing fast CI/CD</h3>
+            <p>Ship code 10× faster with our parallel build pipelines and intelligent caching system.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(6,182,212,0.15)">🔐</div>
+            <h3>Security built-in</h3>
+            <p>SOC2 certified with end-to-end encryption, role-based access, and audit logs out of the box.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(16,185,129,0.15)">📊</div>
+            <h3>Real-time analytics</h3>
+            <p>Track usage, errors, and performance with beautiful dashboards — no setup required.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(245,158,11,0.15)">⚡</div>
+            <h3>Edge deployment</h3>
+            <p>Deploy to 300+ edge locations globally with one command. Sub-50ms latency worldwide.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(244,63,94,0.15)">🤝</div>
+            <h3>Team collaboration</h3>
+            <p>Real-time collaborative editing, comments, and reviews — like Figma but for your stack.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background:rgba(124,58,237,0.15)">🔌</div>
+            <h3>200+ integrations</h3>
+            <p>Connect GitHub, Slack, Jira, Datadog, and every tool your team already loves.</p>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <h2 class="section-title">Simple pricing</h2>
+        <p class="section-subtitle">No hidden fees. Cancel anytime.</p>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-name">Starter</div>
+                <div class="pricing-price">$0 <span>/ mo</span></div>
+                <ul class="pricing-features">
+                    <li>3 projects</li>
+                    <li>5 team members</li>
+                    <li>10GB storage</li>
+                    <li>Community support</li>
+                </ul>
+                <button class="btn-secondary" style="width:100%">Get started</button>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-badge">⚡ Most Popular</div>
+                <div class="pricing-name">Pro</div>
+                <div class="pricing-price">$29 <span>/ mo</span></div>
+                <ul class="pricing-features">
+                    <li>Unlimited projects</li>
+                    <li>25 team members</li>
+                    <li>100GB storage</li>
+                    <li>Priority support</li>
+                    <li>Custom domains</li>
+                </ul>
+                <button class="btn-primary" style="width:100%">Get started</button>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-name">Enterprise</div>
+                <div class="pricing-price">Custom</div>
+                <ul class="pricing-features">
+                    <li>Unlimited everything</li>
+                    <li>SSO / SAML</li>
+                    <li>SLA guarantee</li>
+                    <li>Dedicated support</li>
+                    <li>On-premises option</li>
+                </ul>
+                <button class="btn-secondary" style="width:100%">Talk to sales</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <h2 class="section-title">Ready to ship?</h2>
+        <p class="section-subtitle">Join 12,000+ teams already building with Lumina.</p>
+        <button class="btn-primary" onclick="alert('Demo: Newsletter signup')">Start your free trial →</button>
+    </section>
+
+    <footer>
+        <p>© 2025 Lumina Inc. · <a href="/">Privacy</a> · <a href="/">Terms</a></p>
+        <p style="margin-top:0.5rem; font-size:0.75rem; opacity:0.5;">
+            📊 This site is tracked by <a href="http://localhost:8080">Insight-OS</a> (your own analytics)
+        </p>
+    </footer>
+
+</body>
+</html>

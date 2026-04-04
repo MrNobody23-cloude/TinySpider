@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    /* Brand */
+    --primary: #6C5CE7;
+    --primary-variant: #A29BFE;
+    --secondary: #00D2D3;
+    --accent: #FF9F43;
+    --error: #FF6B6B;
+    --success: #1DD1A1;
+
+    /* Backgrounds */
+    --bg-color: #080B12;
+    --surface: rgba(255, 255, 255, 0.03);
+    --surface-low: rgba(255, 255, 255, 0.015);
+    --surface-high: rgba(255, 255, 255, 0.06);
+    --surface-highest: rgba(255, 255, 255, 0.1);
+    
+    /* Text */
+    --on-surface: #F1F2F6;
+    --on-surface-variant: #94A3B8;
+    --on-surface-low: #64748B;
+    
+    /* Borders */
+    --outline: rgba(255, 255, 255, 0.08);
+    --outline-variant: rgba(255, 255, 255, 0.04);
+    
+    /* Effects */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 32px;
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--on-surface);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism Classes */
+.glass-card {
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--outline);
+    border-radius: var(--radius-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    border-color: var(--outline-variant);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Premium Typography */
+h1, h2, h3, h4 {
+    letter-spacing: -0.02em;
+    font-weight: 800;
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--primary-variant));
+    color: white;
+    border: none;
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+}
+
+.btn-ghost {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--outline);
+    color: var(--on-surface);
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mesh Background */
+.mesh-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 0% 0%, rgba(108, 92, 231, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(0, 210, 211, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(255, 159, 67, 0.05) 0%, transparent 60%);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--surface-high);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--surface-highest);
+}

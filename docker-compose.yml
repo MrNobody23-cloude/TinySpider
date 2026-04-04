@@ -13,7 +13,7 @@ services:
       - clickhouse_data:/var/lib/clickhouse
       - ./backend/packages/api/src/db/clickhouse-schema.sql:/docker-entrypoint-initdb.d/01-clickhouse-schema.sql:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8123/ping"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8123/ping"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -135,7 +135,7 @@ services:
     depends_on:
       - api
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - ./frontend/packages/tracker/dist:/app/packages/tracker/dist:ro
       - ./frontend/packages/tracker/src:/app/packages/tracker/src:ro
