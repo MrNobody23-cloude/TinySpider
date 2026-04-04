@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TinySpider Pricing — Self-hosted analytics for free. Compare plans and features.">
+    <title>Pricing — TinySpider Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="logo-icon">🕸️</span>
+                <span>TinySpider</span>
+                <span class="badge">Demo</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/pricing" class="active">Pricing</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <button class="btn btn-ghost" data-track-event="nav_login_click">Log In</button>
+                <button class="btn btn-primary" data-track-event="nav_signup_click">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding-bottom: 40px;">
+        <div class="hero-tag">
+            <span class="emoji">💎</span>
+            <span>Simple, Transparent Pricing</span>
+        </div>
+        <h1>
+            Analytics That <span class="gradient-text">Scale With You</span>
+        </h1>
+        <p>Self-hosted and open source. Pay for hosted convenience or run it yourself for free.</p>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+        <div class="pricing-grid">
+            <!-- Free Tier -->
+            <div class="pricing-card">
+                <div class="pricing-tier">Community</div>
+                <div class="pricing-amount">
+                    <span class="currency">$</span>0<span class="period">/mo</span>
+                </div>
+                <p class="pricing-desc">Self-hosted, forever free</p>
+                <ul class="pricing-features">
+                    <li>Unlimited events</li>
+                    <li>Unlimited websites</li>
+                    <li>Real-time dashboard</li>
+                    <li>Click heatmaps</li>
+                    <li>Bot detection</li>
+                    <li>API access</li>
+                    <li>Community support</li>
+                </ul>
+                <button class="btn btn-secondary" style="width: 100%;" data-track-event="pricing_community_click">
+                    Get Started
+                </button>
+            </div>
+
+            <!-- Pro Tier -->
+            <div class="pricing-card featured">
+                <div class="pricing-badge">Most Popular</div>
+                <div class="pricing-tier">Pro Hosted</div>
+                <div class="pricing-amount">
+                    <span class="currency">$</span>29<span class="period">/mo</span>
+                </div>
+                <p class="pricing-desc">Managed hosting, zero hassle</p>
+                <ul class="pricing-features">
+                    <li>Everything in Community</li>
+                    <li>Managed infrastructure</li>
+                    <li>1M events/month</li>
+                    <li>Funnel analysis</li>
+                    <li>Live pulse map</li>
+                    <li>Email reports</li>
+                    <li>Priority support</li>
+                    <li>99.9% uptime SLA</li>
+                </ul>
+                <button class="btn btn-primary" style="width: 100%;" data-track-event="pricing_pro_click">
+                    Start Free Trial
+                </button>
+            </div>
+
+            <!-- Enterprise Tier -->
+            <div class="pricing-card">
+                <div class="pricing-tier">Enterprise</div>
+                <div class="pricing-amount">
+                    Custom
+                </div>
+                <p class="pricing-desc">For high-traffic applications</p>
+                <ul class="pricing-features">
+                    <li>Everything in Pro</li>
+                    <li>Unlimited events</li>
+                    <li>Dedicated infrastructure</li>
+                    <li>Custom data retention</li>
+                    <li>SSO / SAML</li>
+                    <li>Audit logs</li>
+                    <li>Dedicated account manager</li>
+                    <li>Custom integrations</li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%;" data-track-event="pricing_enterprise_click">
+                    Contact Sales
+                </button>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div style="max-width: 700px; margin: 80px auto 0;">
+            <div class="section-header">
+                <div class="overline">FAQ</div>
+                <h2>Common Questions</h2>
+            </div>
+
+            <div class="card" style="margin-bottom: 16px; cursor: pointer;" data-track-event="faq_self_host">
+                <h3 style="font-size: 1rem;">🤔 Can I really use TinySpider for free?</h3>
+                <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-top: 8px;">
+                    Yes! TinySpider is fully open source under the MIT license. Self-host on your own infrastructure and track unlimited events, forever free with no feature restrictions.
+                </p>
+            </div>
+            <div class="card" style="margin-bottom: 16px; cursor: pointer;" data-track-event="faq_gdpr">
+                <h3 style="font-size: 1rem;">🔒 Is TinySpider GDPR compliant?</h3>
+                <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-top: 8px;">
+                    By design. We don't use cookies, don't track personal data, and hash all IP addresses with salted SHA-256. Since the data stays on your infrastructure, you maintain full control.
+                </p>
+            </div>
+            <div class="card" style="margin-bottom: 16px; cursor: pointer;" data-track-event="faq_migration">
+                <h3 style="font-size: 1rem;">📦 How do I migrate from Google Analytics?</h3>
+                <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-top: 8px;">
+                    Simply add the TinySpider tracker script to your site and remove the GA tag. You'll start collecting privacy-friendly analytics immediately. No data migration needed.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; margin-top: 0; padding-top: 0;">
+            <span>&copy; 2026 TinySpider. All rights reserved.</span>
+            <span>Made with ❤️ for privacy</span>
+        </div>
+    </footer>
+
+    <script>
+        window.InsightConfig = {
+            siteId: 'demo-site',
+            endpoint: 'http://localhost:3000/collect'
+        };
+    </script>
+    <script src="/app.js"></script>
+    <script src="/tracker.js"></script>
+</body>
+</html>

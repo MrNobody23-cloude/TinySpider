@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact TinySpider — Get in touch for support, partnerships, or enterprise inquiries.">
+    <title>Contact — TinySpider Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="logo-icon">🕸️</span>
+                <span>TinySpider</span>
+                <span class="badge">Demo</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/pricing">Pricing</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/contact" class="active">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <button class="btn btn-ghost" data-track-event="nav_login_click">Log In</button>
+                <button class="btn btn-primary" data-track-event="nav_signup_click">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding-bottom: 40px;">
+        <div class="hero-tag">
+            <span class="emoji">💬</span>
+            <span>Get In Touch</span>
+        </div>
+        <h1>
+            We'd Love to <span class="gradient-text">Hear From You</span>
+        </h1>
+        <p>Questions about integration? Need enterprise support? Drop us a message.</p>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+        <div class="contact-layout">
+            <div class="contact-info">
+                <h3>Let's Connect</h3>
+                <p>Whether you're looking to self-host TinySpider, need help with your analytics setup, or want to discuss enterprise partnerships — we're here to help.</p>
+
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">📧</div>
+                    <div class="contact-info-text">
+                        <strong>Email</strong>
+                        <span>hello@tinyspider.dev</span>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">💻</div>
+                    <div class="contact-info-text">
+                        <strong>GitHub</strong>
+                        <span>github.com/tinyspider</span>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">💬</div>
+                    <div class="contact-info-text">
+                        <strong>Discord</strong>
+                        <span>discord.gg/tinyspider</span>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">🌍</div>
+                    <div class="contact-info-text">
+                        <strong>Location</strong>
+                        <span>Remote-first, planet Earth</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 24px;">Send a Message</h3>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label class="form-label" for="contact-name">Full Name</label>
+                        <input class="form-input" type="text" id="contact-name" placeholder="Jane Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contact-email">Email Address</label>
+                        <input class="form-input" type="email" id="contact-email" placeholder="jane@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contact-subject">Subject</label>
+                        <select class="form-select" id="contact-subject">
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="enterprise">Enterprise Plan</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="bug">Bug Report</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="contact-message">Message</label>
+                        <textarea class="form-textarea" id="contact-message" placeholder="Tell us how we can help..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-checkbox">
+                            <input type="checkbox" id="contact-newsletter">
+                            <span style="font-size: 0.85rem; color: var(--color-text-secondary);">Subscribe to product updates</span>
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit" style="width: 100%;">
+                        📤 Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; margin-top: 0; padding-top: 0;">
+            <span>&copy; 2026 TinySpider. All rights reserved.</span>
+            <span>Made with ❤️ for privacy</span>
+        </div>
+    </footer>
+
+    <script>
+        window.InsightConfig = {
+            siteId: 'demo-site',
+            endpoint: 'http://localhost:3000/collect'
+        };
+    </script>
+    <script src="/app.js"></script>
+    <script src="/tracker.js"></script>
+</body>
+</html>

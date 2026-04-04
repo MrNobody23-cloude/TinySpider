@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8
+    container_name: insight-clickhouse
+    environment:
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./backend/packages/api/src/db/clickhouse-schema.sql:/docker-entrypoint-initdb.d/01-clickhouse-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123/ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - insight-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: insight-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - insight-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: insight-postgres
+    environment:
+      POSTGRES_DB: insightdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/packages/api/src/db/postgres-schema.sql:/docker-entrypoint-initdb.d/01-postgres-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - insight-network
+
+  api:
+    build:
+      context: ./backend/packages/api
+      dockerfile: Dockerfile
+    container_name: insight-api
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: debug
+      CLICKHOUSE_URL: http://clickhouse:8123
+      CLICKHOUSE_DATABASE: default
+      REDIS_URL: redis://redis:6379
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: insightdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      IP_HASH_SALT: your-secret-salt-here-change-in-production
+      JWT_SECRET: your-jwt-secret-here-change-in-production
+      BCRYPT_ROUNDS: 12
+      API_CORS_ORIGINS: "http://localhost,http://localhost:5173,http://localhost:80"
+      GEOIP_MMDB_PATH: /app/data/GeoLite2-City.mmdb
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    networks:
+      - insight-network
+    volumes:
+      - ./backend/packages/api/src:/app/src
+
+  dashboard:
+    build:
+      context: ./frontend/packages/dashboard
+      dockerfile: Dockerfile
+    container_name: insight-dashboard
+    environment:
+      NODE_ENV: production
+      VITE_API_BASE: http://localhost/api
+    depends_on:
+      - api
+    networks:
+      - insight-network
+    # Dashboard is served via nginx
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: insight-nginx
+    depends_on:
+      - api
+      - dashboard
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - insight-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  demo-site:
+    build:
+      context: ./frontend/packages/demo-site
+      dockerfile: Dockerfile
+    container_name: insight-demo-site
+    environment:
+      DEMO_PORT: 8080
+    depends_on:
+      - api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend/packages/tracker/dist:/app/packages/tracker/dist:ro
+      - ./frontend/packages/tracker/src:/app/packages/tracker/src:ro
+    networks:
+      - insight-network
+
+volumes:
+  clickhouse_data:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  insight-network:
+    driver: bridge

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TinySpider Blog — Articles on web analytics, privacy, and performance engineering.">
+    <title>Blog — TinySpider Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="logo-icon">🕸️</span>
+                <span>TinySpider</span>
+                <span class="badge">Demo</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/pricing">Pricing</a></li>
+                <li><a href="/blog" class="active">Blog</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <button class="btn btn-ghost" data-track-event="nav_login_click">Log In</button>
+                <button class="btn btn-primary" data-track-event="nav_signup_click">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding-bottom: 40px;">
+        <div class="hero-tag">
+            <span class="emoji">📝</span>
+            <span>TinySpider Blog</span>
+        </div>
+        <h1>
+            Insights on <span class="gradient-text">Analytics</span><br>
+            &amp; <span class="gradient-text">Privacy</span>
+        </h1>
+        <p>Deep dives into web analytics architecture, privacy engineering, and performance optimization.</p>
+    </section>
+
+    <section class="section" style="padding-top: 0;">
+        <div class="blog-grid">
+            <div class="blog-card" data-track-event="blog_click_clickhouse">
+                <div class="blog-card-image">📊</div>
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="tag">Engineering</span>
+                        <span>Mar 15, 2026</span>
+                        <span>8 min read</span>
+                    </div>
+                    <h3>Why We Chose ClickHouse for Time-Series Analytics</h3>
+                    <p>How ClickHouse's columnar storage and MergeTree engine handle billions of events with sub-second query times, and why it outperforms alternatives for analytics workloads.</p>
+                </div>
+            </div>
+
+            <div class="blog-card" data-track-event="blog_click_privacy">
+                <div class="blog-card-image">🔒</div>
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="tag">Privacy</span>
+                        <span>Mar 8, 2026</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3>Building GDPR-Compliant Analytics Without Cookies</h3>
+                    <p>A technical deep-dive into IP hashing, session management via sessionStorage, and why privacy-first analytics don't have to sacrifice accuracy.</p>
+                </div>
+            </div>
+
+            <div class="blog-card" data-track-event="blog_click_heatmaps">
+                <div class="blog-card-image">🔥</div>
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="tag">Product</span>
+                        <span>Feb 28, 2026</span>
+                        <span>5 min read</span>
+                    </div>
+                    <h3>How We Built Resolution-Independent Heatmaps</h3>
+                    <p>Viewport-normalized click coordinates solve the multi-device problem. Learn how we render kernel density estimation overlays that work at any screen size.</p>
+                </div>
+            </div>
+
+            <div class="blog-card" data-track-event="blog_click_tracker">
+                <div class="blog-card-image">⚡</div>
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="tag">Performance</span>
+                        <span>Feb 20, 2026</span>
+                        <span>7 min read</span>
+                    </div>
+                    <h3>Keeping the Tracker Under 3KB: A Size Budget Story</h3>
+                    <p>The constraints and creative solutions behind our minimal tracker script. How sendBeacon, requestIdleCallback, and careful bundling keep things light.</p>
+                </div>
+            </div>
+
+            <div class="blog-card" data-track-event="blog_click_botdetection">
+                <div class="blog-card-image">🤖</div>
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="tag">Security</span>
+                        <span>Feb 12, 2026</span>
+                        <span>9 min read</span>
+                    </div>
+                    <h3>Multi-Layer Bot Detection for Accurate Analytics</h3>
+                    <p>Combining user-agent patterns, webdriver detection, behavioral signals, and honeypot traps to filter automated traffic without false positives.</p>
+                </div>
+            </div>
+
+            <div class="blog-card" data-track-event="blog_click_architecture">
+                <div class="blog-card-image">🏗️</div>
+                <div class="blog-card-body">
+                    <div class="blog-card-meta">
+                        <span class="tag">Architecture</span>
+                        <span>Feb 5, 2026</span>
+                        <span>10 min read</span>
+                    </div>
+                    <h3>Event Ingestion at Scale: Redis Queues + BullMQ</h3>
+                    <p>How our non-blocking ingestion pipeline uses Redis-backed message queues to handle 100K+ events per second while maintaining data integrity.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; margin-top: 0; padding-top: 0;">
+            <span>&copy; 2026 TinySpider. All rights reserved.</span>
+            <span>Made with ❤️ for privacy</span>
+        </div>
+    </footer>
+
+    <script>
+        window.InsightConfig = {
+            siteId: 'demo-site',
+            endpoint: 'http://localhost:3000/collect'
+        };
+    </script>
+    <script src="/app.js"></script>
+    <script src="/tracker.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TinySpider Demo - Experience real-time analytics tracking in action. See pageviews, clicks, and custom events captured live.">
+    <title>TinySpider Demo — Real-Time Web Analytics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="logo-icon">🕸️</span>
+                <span>TinySpider</span>
+                <span class="badge">Demo</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/features">Features</a></li>
+                <li><a href="/pricing">Pricing</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <button class="btn btn-ghost" data-track-event="nav_login_click">Log In</button>
+                <button class="btn btn-primary" data-track-event="nav_signup_click">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-tag">
+            <span class="emoji">⚡</span>
+            <span>Self-hosted Analytics Platform</span>
+        </div>
+        <h1>
+            Privacy-First Analytics<br>
+            <span class="gradient-text">Without Compromise</span>
+        </h1>
+        <p>
+            Lightweight, blazing-fast web analytics that respect user privacy.
+            Track everything with a 3KB script. No cookies, no third-party data sharing.
+        </p>
+        <div class="hero-actions">
+            <button class="btn btn-primary btn-lg" data-track-event="hero_get_started">
+                🚀 Get Started Free
+            </button>
+            <button class="btn btn-secondary btn-lg" data-track-event="hero_view_demo">
+                📊 View Live Dashboard
+            </button>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="value">&lt;3KB</div>
+                <div class="label">Tracker Size</div>
+            </div>
+            <div class="hero-stat">
+                <div class="value">100K+</div>
+                <div class="label">Events/sec</div>
+            </div>
+            <div class="hero-stat">
+                <div class="value">Zero</div>
+                <div class="label">Cookies Used</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section class="section" id="features-overview">
+        <div class="section-header">
+            <div class="overline">Why TinySpider?</div>
+            <h2>Everything You Need to Understand Your Users</h2>
+            <p>Powerful analytics that are private by design, self-hosted, and incredibly fast.</p>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card" data-track-event="feature_card_realtime">
+                <div class="feature-icon">📈</div>
+                <h3>Real-Time Dashboard</h3>
+                <p>Watch traffic spikes happen live. WebSocket-powered updates with beautiful charts and visualizations.</p>
+            </div>
+            <div class="feature-card" data-track-event="feature_card_heatmap">
+                <div class="feature-icon">🔥</div>
+                <h3>Click Heatmaps</h3>
+                <p>See exactly where users click with kernel density estimation. Viewport-normalized coordinates work on any screen size.</p>
+            </div>
+            <div class="feature-card" data-track-event="feature_card_funnels">
+                <div class="feature-icon">🎯</div>
+                <h3>Funnel Analysis</h3>
+                <p>Define conversion funnels and track drop-off rates. Understand where users leave and optimize your flow.</p>
+            </div>
+            <div class="feature-card" data-track-event="feature_card_botdetect">
+                <div class="feature-icon">🤖</div>
+                <h3>Bot Detection</h3>
+                <p>Multi-layered bot filtering with UA signatures, webdriver detection, and behavioral analysis. No false positives.</p>
+            </div>
+            <div class="feature-card" data-track-event="feature_card_livemap">
+                <div class="feature-icon">🌍</div>
+                <h3>Live Pulse Map</h3>
+                <p>Geo-located real-time user map showing active sessions worldwide. MaxMind GeoIP integration included.</p>
+            </div>
+            <div class="feature-card" data-track-event="feature_card_privacy">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy-First</h3>
+                <p>IP addresses are hashed with SHA-256. No cookies used. No data leaves your servers. GDPR compliant out-of-the-box.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section class="section" id="interactive-demo">
+        <div class="section-header">
+            <div class="overline">Try It Now</div>
+            <h2>Interactive Tracking Demo</h2>
+            <p>Click the buttons below and watch events appear in the live event stream (bottom-right corner).</p>
+        </div>
+
+        <div class="card" style="max-width: 700px; margin: 0 auto;">
+            <h3 style="margin-bottom: 16px;">🎮 Generate Tracking Events</h3>
+            <p style="color: var(--color-text-secondary); margin-bottom: 20px;">
+                Each interaction below is captured by the TinySpider tracker. Click the green badge in the bottom-right to see the live event stream.
+            </p>
+            <div class="demo-actions">
+                <button class="btn btn-primary" data-track-event="demo_cta_click">Primary CTA</button>
+                <button class="btn btn-secondary" data-track-event="demo_secondary_click">Secondary Action</button>
+                <button class="btn btn-outline" data-track-event="demo_outline_click">Explore More</button>
+                <button class="btn btn-primary" data-track-event="demo_download">📥 Download</button>
+                <button class="btn btn-secondary" data-track-event="demo_share">📤 Share</button>
+                <button class="btn btn-outline" data-track-event="demo_bookmark">🔖 Bookmark</button>
+            </div>
+
+            <div style="margin-top: 28px;">
+                <h4 style="margin-bottom: 12px;">📧 Newsletter Signup (Form Tracking)</h4>
+                <form id="newsletter-form" style="display: flex; gap: 12px;">
+                    <input class="form-input" type="email" placeholder="you@example.com" style="flex: 1;" required>
+                    <button class="btn btn-primary" type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section" style="text-align: center; padding: 100px 2rem;">
+        <h2 style="font-size: 2.2rem; margin-bottom: 16px;">Ready to Take Control of Your Analytics?</h2>
+        <p style="color: var(--color-text-secondary); max-width: 500px; margin: 0 auto 32px; font-size: 1.05rem;">
+            Deploy TinySpider in minutes. Own your data. Respect your users' privacy.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-lg" data-track-event="cta_deploy_now">🚀 Deploy Now</button>
+            <a href="/contact" class="btn btn-secondary btn-lg">💬 Talk to Sales</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="nav-brand">
+                    <span class="logo-icon">🕸️</span>
+                    <span>TinySpider</span>
+                </div>
+                <p>Self-hosted, privacy-first web analytics for modern teams. Open source under the MIT license.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="/features">Features</a></li>
+                    <li><a href="/pricing">Pricing</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                    <li><a href="#">Documentation</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press Kit</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">GDPR</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 TinySpider. All rights reserved.</span>
+            <span>Made with ❤️ for privacy</span>
+        </div>
+    </footer>
+
+    <!-- Tracker Script -->
+    <script>
+        window.InsightConfig = {
+            siteId: 'demo-site',
+            endpoint: 'http://localhost:3000/collect'
+        };
+    </script>
+    <script src="/app.js"></script>
+    <script src="/tracker.js"></script>
+</body>
+</html>

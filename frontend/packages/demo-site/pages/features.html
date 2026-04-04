@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TinySpider Features — Real-time dashboards, heatmaps, funnel analysis, bot detection, and more.">
+    <title>Features — TinySpider Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="logo-icon">🕸️</span>
+                <span>TinySpider</span>
+                <span class="badge">Demo</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/features" class="active">Features</a></li>
+                <li><a href="/pricing">Pricing</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+            <div class="nav-cta">
+                <button class="btn btn-ghost" data-track-event="nav_login_click">Log In</button>
+                <button class="btn btn-primary" data-track-event="nav_signup_click">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="padding-bottom: 40px;">
+        <div class="hero-tag">
+            <span class="emoji">✨</span>
+            <span>Feature Deep-Dive</span>
+        </div>
+        <h1>
+            Built for <span class="gradient-text">Performance</span><br>
+            Designed for <span class="gradient-text">Privacy</span>
+        </h1>
+        <p>Every feature is crafted to give you actionable insights without compromising user trust.</p>
+    </section>
+
+    <section class="section">
+        <!-- Feature 1: Real-time Dashboard -->
+        <div class="card" style="margin-bottom: 32px; padding: 40px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div>
+                    <div class="feature-icon" style="margin-bottom: 16px;">📊</div>
+                    <h2 style="margin-bottom: 12px;">Real-Time Dashboard</h2>
+                    <p style="color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 20px;">
+                        Watch your traffic as it happens. Our WebSocket-powered dashboard refreshes live metrics every second, showing active users, page views, and traffic spikes in real-time.
+                    </p>
+                    <ul style="list-style: none;">
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ WebSocket live updates</li>
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Recharts-powered visualizations</li>
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Configurable time intervals</li>
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Top referrers & top pages</li>
+                    </ul>
+                </div>
+                <div class="card" style="background: var(--color-surface-raised); height: 280px; display: flex; align-items: center; justify-content: center;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 8px;">📈</div>
+                        <div style="font-family: var(--font-mono); font-size: 2.4rem; font-weight: 800; color: var(--color-accent-light);">1,247</div>
+                        <div style="color: var(--color-text-muted); font-size: 0.85rem; margin-top: 4px;">Active Users Now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 2: Click Heatmaps -->
+        <div class="card" style="margin-bottom: 32px; padding: 40px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div class="card" style="background: var(--color-surface-raised); height: 280px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="position: absolute; width: 100%; height: 100%; background: radial-gradient(circle at 30% 40%, rgba(255,80,50,0.4) 0%, transparent 30%), radial-gradient(circle at 60% 35%, rgba(255,200,50,0.3) 0%, transparent 25%), radial-gradient(circle at 45% 60%, rgba(255,120,50,0.25) 0%, transparent 20%);"></div>
+                    <div style="position: relative; z-index: 1; font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-text-muted);">Click density overlay</div>
+                </div>
+                <div>
+                    <div class="feature-icon" style="margin-bottom: 16px;">🔥</div>
+                    <h2 style="margin-bottom: 12px;">Click Heatmaps</h2>
+                    <p style="color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 20px;">
+                        Visualize user engagement with beautiful density heat maps. We use kernel density estimation (KDE) to render smooth gradient overlays directly onto canvas elements.
+                    </p>
+                    <ul style="list-style: none;">
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Viewport-normalized coordinates (0-1)</li>
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Resolution-independent</li>
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Gaussian KDE rendering</li>
+                        <li style="padding: 6px 0; color: var(--color-text-secondary); font-size: 0.9rem;">✅ Page screenshot overlays</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 3: Funnel Analysis -->
+        <div class="card" style="margin-bottom: 32px; padding: 40px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;">
+                <div>
+                    <div class="feature-icon" style="margin-bottom: 16px;">🎯</div>
+                    <h2 style="margin-bottom: 12px;">Funnel Analysis</h2>
+                    <p style="color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 20px;">
+                        Define conversion funnels with URL step patterns. Track how users progress through your flows and identify exactly where they drop off.
+                    </p>
+                    <div class="demo-actions" style="margin-top: 0;">
+                        <button class="btn btn-primary" data-track-event="funnel_demo_step1">Step 1: Landing</button>
+                        <button class="btn btn-secondary" data-track-event="funnel_demo_step2">Step 2: Signup</button>
+                        <button class="btn btn-outline" data-track-event="funnel_demo_step3">Step 3: Purchase</button>
+                    </div>
+                </div>
+                <div class="card" style="background: var(--color-surface-raised); padding: 24px;">
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.85rem;">/ (Landing)</span>
+                            <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-success);">2,340</span>
+                        </div>
+                        <div style="height: 8px; background: var(--color-surface-overlay); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 100%; height: 100%; background: var(--color-accent); border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.85rem;">/signup</span>
+                            <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-warning);">782</span>
+                        </div>
+                        <div style="height: 8px; background: var(--color-surface-overlay); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 33%; height: 100%; background: var(--color-warning); border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.85rem;">/purchase</span>
+                            <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-danger);">156</span>
+                        </div>
+                        <div style="height: 8px; background: var(--color-surface-overlay); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 7%; height: 100%; background: var(--color-danger); border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 16px; font-size: 0.82rem; color: var(--color-text-muted);">
+                        Overall conversion: <span style="color: var(--color-accent-light); font-weight: 700;">6.7%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-bottom" style="border-top: none; margin-top: 0; padding-top: 0;">
+            <span>&copy; 2026 TinySpider. All rights reserved.</span>
+            <span>Made with ❤️ for privacy</span>
+        </div>
+    </footer>
+
+    <script>
+        window.InsightConfig = {
+            siteId: 'demo-site',
+            endpoint: 'http://localhost:3000/collect'
+        };
+    </script>
+    <script src="/app.js"></script>
+    <script src="/tracker.js"></script>
+</body>
+</html>

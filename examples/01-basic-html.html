@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insight Analytics - Basic HTML Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        p { color: #666; line-height: 1.6; }
+        .info { 
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            border-left: 4px solid #2196F3;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+        .link-group {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        a {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            color: #2196F3;
+            text-decoration: none;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+        a:hover {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Insight Analytics Example</h1>
+        <p>This page demonstrates basic Insight Analytics integration with plain HTML.</p>
+
+        <div class="info">
+            <strong>ℹ️ Configuration:</strong>
+            <p>Site ID: <code>demo-site</code></p>
+            <p>Endpoint: <code>http://localhost:3000/collect</code></p>
+            <p>The tracker is loaded via script tag and automatically tracks page views and clicks.</p>
+        </div>
+
+        <h2>Try These Actions</h2>
+        <p>Perform these actions and watch the dashboard update in real-time:</p>
+
+        <button onclick="trackCustomEvent('button-click', 'clicked-demo-button')">
+            Click Me (Custom Event)
+        </button>
+
+        <div class="link-group">
+            <a href="?page=about">Go to About (Page Navigation)</a>
+            <a href="?page=contact">Go to Contact</a>
+            <a href="?page=pricing">Go to Pricing</a>
+        </div>
+
+        <div class="info">
+            <strong>📈 What's Being Tracked:</strong>
+            <ul>
+                <li>✅ Page views (automatic)</li>
+                <li>✅ Link clicks (automatic)</li>
+                <li>✅ Button clicks (automatic)</li>
+                <li>✅ Custom events (when you click the button)</li>
+                <li>✅ Referrer information</li>
+                <li>✅ User session</li>
+            </ul>
+        </div>
+
+        <h2>Dashboard</h2>
+        <p>View the live analytics at:</p>
+        <a href="http://localhost:5173" target="_blank">🔗 Open Dashboard (http://localhost:5173)</a>
+
+        <div class="info">
+            <strong>📝 Note:</strong>
+            <p>Events are processed in real-time by the backend. You'll see them appear in the dashboard within a few seconds of interaction on this page.</p>
+        </div>
+    </div>
+
+    <!-- Insight Analytics Tracker -->
+    <script>
+        // Configure Insight Analytics
+        window.InsightConfig = {
+            siteId: 'demo-site',
+            endpoint: 'http://localhost:3000/collect',
+            debug: true  // Enable console logging
+        };
+    </script>
+    <script src="http://localhost:3000/tracker.js"></script>
+
+    <!-- Custom event tracking -->
+    <script>
+        function trackCustomEvent(eventType, eventValue) {
+            // Use the global Insight object created by tracker.js
+            if (window.Insight && window.Insight.track) {
+                window.Insight.track({
+                    event_type: eventType,
+                    event_value: eventValue,
+                    metadata: {
+                        timestamp: new Date().toISOString(),
+                        userAction: 'manual'
+                    }
+                });
+                alert(`✅ Custom event tracked: ${eventType}\n\nCheck the dashboard for the event!`);
+            } else {
+                alert('❌ Tracker not loaded yet. Please refresh the page.');
+            }
+        }
+
+        // Track when the page is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('✅ Page loaded - Analytics tracker initialized');
+        });
+    </script>
+</body>
+</html>
