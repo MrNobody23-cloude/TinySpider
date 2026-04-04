@@ -22,7 +22,7 @@
 (function () {
     'use strict';
 
-    const ENDPOINT = 'http://localhost:3001/track';
+    const ENDPOINT = 'https://tinyspider.onrender.com/track';
 
     // ── Generate a unique visitor ID (persists across sessions via localStorage) ──
     function genUUID() {

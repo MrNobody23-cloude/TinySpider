@@ -69,14 +69,10 @@
     --shadow-glow:   0 0 40px rgba(124,58,237,0.12);
 }
 
-/* ---------- Mesh gradient background ---------- */
 body {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: var(--bg);
+    background: #05070a;
     color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 .mesh-bg {
@@ -472,11 +468,11 @@ body {
 
 .bento-card {
     background: rgba(255,255,255,0.02);
-    backdrop-filter: blur(32px) saturate(150%);
-    -webkit-backdrop-filter: blur(32px) saturate(150%);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
     border: 1px solid rgba(255,255,255,0.06);
-    border-radius: var(--radius);
-    padding: 2.25rem;
+    border-radius: 20px;
+    padding: 2.5rem;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     overflow: hidden;
@@ -485,9 +481,22 @@ body {
 .bento-card:hover {
     background: rgba(255,255,255,0.04);
     border-color: rgba(124, 58, 237, 0.4);
-    box-shadow: 0 32px 64px rgba(0,0,0,0.6), 0 0 80px rgba(124,58,237,0.15);
-    transform: translateY(-12px) perspective(1000px) rotateX(1deg);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 100px rgba(124,58,237,0.1);
+    transform: translateY(-16px) perspective(1000px) rotateX(2deg);
 }
+
+.bento-card::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+.bento-card:hover::after { opacity: 1; }
 
 .bento-card:hover {
     border-color: rgba(124, 58, 237, 0.3);

@@ -4,13 +4,35 @@
  * No fake/random values anywhere.
  */
 
-const API  = 'http://localhost:3001';
-const getWSUrl = () => `${location.protocol === 'https:' ? 'wss:' : 'ws:'}//localhost:3001`;
+/* ── TOP OF SCRIPT.JS ── */
+
+// 1. Paste your Render URL here (e.g., https://your-backend.onrender.com)
+const PROD_API_URL = "https://tinyspider.onrender.com";
+
+const API = window.location.hostname === 'localhost'
+    ? 'http://localhost:3001'
+    : PROD_API_URL;
+
+const getWSUrl = () => {
+    const isLocal = window.location.hostname === 'localhost';
+    const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+
+    if (isLocal) return `${protocol}//localhost:3001`;
+
+    // For Production: Strip 'https://' from the URL for WebSocket
+    const host = PROD_API_URL.replace(/^https?:\/\//, '');
+    return `${protocol}//${host}`;
+};
 
 /* ── Chart.js global defaults ─────────────────────────── */
-Chart.defaults.color         = '#94a3b8';
-Chart.defaults.borderColor   = 'rgba(255,255,255,0.06)';
-Chart.defaults.font.family   = "'Outfit', sans-serif";
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+Chart.defaults.font.family = "'Outfit', sans-serif";
+
+// Register Chart.js Plugin
+if (typeof ChartDataLabels !== 'undefined') {
+    Chart.register(ChartDataLabels);
+}
 
 /* ── Utility ──────────────────────────────────────────── */
 function $(id) { return document.getElementById(id); }
@@ -43,12 +65,12 @@ async function apiFetch(path) {
 const CHART_DEFAULTS = {
     emptyScales: {
         x: {
-            grid:  { color: 'rgba(255,255,255,0.05)' },
+            grid: { color: 'rgba(255,255,255,0.05)' },
             ticks: { color: '#475569' },
         },
         y: {
             beginAtZero: true,
-            grid:  { color: 'rgba(255,255,255,0.05)' },
+            grid: { color: 'rgba(255,255,255,0.05)' },
             ticks: { color: '#475569' },
         },
     },
@@ -59,9 +81,9 @@ const CHART_DEFAULTS = {
 ══════════════════════════════════════════════════════ */
 class InsightOS {
     constructor() {
-        this.charts   = {};
-        this.ws       = null;
-        this.rtBins   = Array(30).fill(0); // 30 × 2s buckets = 60s window
+        this.charts = {};
+        this.ws = null;
+        this.rtBins = Array(30).fill(0); // 30 × 2s buckets = 60s window
         this.rtLabels = Array.from({ length: 30 }, (_, i) => `-${(29 - i) * 2}s`);
         this.init();
     }
@@ -96,14 +118,14 @@ class InsightOS {
         }
 
         // Poll every 10 seconds to keep data fresh
-        setInterval(() => this.refreshOverview(),  10_000);
-        setInterval(() => this.refreshSessions(),   5_000);
-        setInterval(() => this.refreshRealtime(),   2_000);
+        setInterval(() => this.refreshOverview(), 10_000);
+        setInterval(() => this.refreshSessions(), 5_000);
+        setInterval(() => this.refreshRealtime(), 2_000);
     }
 
     /* ── THEME ─────────────────────────────────────────── */
     initTheme() {
-        const btn  = $('themeToggleBtn');
+        const btn = $('themeToggleBtn');
         const root = document.documentElement;
         const saved = localStorage.getItem('ios-theme') || 'dark';
         root.setAttribute('data-theme', saved);
@@ -117,14 +139,14 @@ class InsightOS {
     }
 
     updateChartColors() {
-        const dark   = document.documentElement.getAttribute('data-theme') !== 'light';
-        const grid   = dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
-        const tick   = dark ? '#475569' : '#64748b';
+        const dark = document.documentElement.getAttribute('data-theme') !== 'light';
+        const grid = dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
+        const tick = dark ? '#475569' : '#64748b';
         Object.values(this.charts).forEach(c => {
             if (!c?.options?.scales) return;
             ['x', 'y'].forEach(ax => {
                 if (c.options.scales[ax]) {
-                    c.options.scales[ax].grid  = { color: grid };
+                    c.options.scales[ax].grid = { color: grid };
                     c.options.scales[ax].ticks = { color: tick };
                 }
             });
@@ -132,9 +154,11 @@ class InsightOS {
         });
     }
 
+
+
     /* ── NAVIGATION ────────────────────────────────────── */
     initNavigation() {
-        const btns   = document.querySelectorAll('.top-nav-btn');
+        const btns = document.querySelectorAll('.top-nav-btn');
         const panels = document.querySelectorAll('.tab-panel');
 
         btns.forEach(btn => {
@@ -149,12 +173,12 @@ class InsightOS {
                 });
                 // Load fresh data for the activated tab
                 const tab = btn.dataset.tab;
-                if (tab === 'realtime')  { this.refreshSessions(); this.refreshRealtime(); }
+                if (tab === 'realtime') { this.refreshSessions(); this.refreshRealtime(); }
                 if (tab === 'referrers') this.refreshReferrers();
-                if (tab === 'overview')  { this.refreshTraffic(); this.refreshPages(); }
-                if (tab === 'heatmaps')  this.refreshHeatmaps();
-                if (tab === 'bots')      this.refreshBotStats();
-                if (tab === 'funnels')   this.buildFunnel(this._lastFunnelSteps || ['/', '/pricing', '/checkout']);
+                if (tab === 'overview') { this.refreshTraffic(); this.refreshPages(); }
+                if (tab === 'heatmaps') this.refreshHeatmaps();
+                if (tab === 'bots') this.refreshBotStats();
+                if (tab === 'funnels') this.buildFunnel(this._lastFunnelSteps || ['/', '/pricing', '/checkout']);
             });
         });
     }
@@ -166,17 +190,23 @@ class InsightOS {
         /* Traffic line */
         this.charts.traffic = new Chart($('trafficChart'), {
             type: 'line',
-            data: { labels: [], datasets: [{ label: 'Page Views', data: [],
-                borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.10)',
-                pointBackgroundColor: '#a78bfa', pointRadius: 4, pointHoverRadius: 6,
-                tension: 0.45, fill: true, borderWidth: 2.5 }] },
+            data: {
+                labels: [], datasets: [{
+                    label: 'Page Views', data: [],
+                    borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.10)',
+                    pointBackgroundColor: '#a78bfa', pointRadius: 4, pointHoverRadius: 6,
+                    tension: 0.45, fill: true, borderWidth: 2.5
+                }]
+            },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
                     legend: { display: false }, datalabels: { display: false },
-                    tooltip: { backgroundColor: 'rgba(14,17,24,0.92)', borderColor: 'rgba(124,58,237,0.4)',
-                        borderWidth: 1, titleColor: '#f1f5f9', bodyColor: '#94a3b8', padding: 12, cornerRadius: 10 }
+                    tooltip: {
+                        backgroundColor: 'rgba(14,17,24,0.92)', borderColor: 'rgba(124,58,237,0.4)',
+                        borderWidth: 1, titleColor: '#f1f5f9', bodyColor: '#94a3b8', padding: 12, cornerRadius: 10
+                    }
                 },
                 scales: CHART_DEFAULTS.emptyScales,
             },
@@ -185,11 +215,15 @@ class InsightOS {
         /* Top pages bar */
         this.charts.pages = new Chart($('pagesChart'), {
             type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Page Views', data: [],
-                backgroundColor: ['rgba(124,58,237,0.75)','rgba(6,182,212,0.75)',
-                    'rgba(16,185,129,0.75)','rgba(245,158,11,0.75)','rgba(244,63,94,0.75)',
-                    'rgba(124,58,237,0.55)','rgba(6,182,212,0.55)','rgba(16,185,129,0.55)'],
-                borderRadius: 8, borderSkipped: false }] },
+            data: {
+                labels: [], datasets: [{
+                    label: 'Page Views', data: [],
+                    backgroundColor: ['rgba(124,58,237,0.75)', 'rgba(6,182,212,0.75)',
+                        'rgba(16,185,129,0.75)', 'rgba(245,158,11,0.75)', 'rgba(244,63,94,0.75)',
+                        'rgba(124,58,237,0.55)', 'rgba(6,182,212,0.55)', 'rgba(16,185,129,0.55)'],
+                    borderRadius: 8, borderSkipped: false
+                }]
+            },
             options: {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { display: false }, datalabels: { display: false } },
@@ -205,9 +239,11 @@ class InsightOS {
             type: 'line',
             data: {
                 labels: [...this.rtLabels],
-                datasets: [{ label: 'Page Views', data: [...this.rtBins],
+                datasets: [{
+                    label: 'Page Views', data: [...this.rtBins],
                     borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.10)',
-                    tension: 0.45, fill: true, borderWidth: 2.5, pointRadius: 0 }]
+                    tension: 0.45, fill: true, borderWidth: 2.5, pointRadius: 0
+                }]
             },
             options: {
                 responsive: true, maintainAspectRatio: false, animation: false,
@@ -222,15 +258,21 @@ class InsightOS {
         /* Funnel bar (horizontal) */
         this.charts.funnel = new Chart($('funnelChart'), {
             type: 'bar',
-            data: { labels: [], datasets: [{ label: 'Users', data: [],
-                backgroundColor: ['rgba(124,58,237,0.8)','rgba(6,182,212,0.8)','rgba(16,185,129,0.8)'],
-                borderRadius: 10, borderSkipped: false }] },
+            data: {
+                labels: [], datasets: [{
+                    label: 'Users', data: [],
+                    backgroundColor: ['rgba(124,58,237,0.8)', 'rgba(6,182,212,0.8)', 'rgba(16,185,129,0.8)'],
+                    borderRadius: 10, borderSkipped: false
+                }]
+            },
             options: {
                 responsive: true, maintainAspectRatio: false, indexAxis: 'y',
                 plugins: {
                     legend: { display: false },
-                    datalabels: { anchor: 'end', align: 'end', color: '#94a3b8',
-                        font: { weight: 600 }, formatter: v => v ? v.toLocaleString() : '0' },
+                    datalabels: {
+                        anchor: 'end', align: 'end', color: '#94a3b8',
+                        font: { weight: 600 }, formatter: v => v ? v.toLocaleString() : '0'
+                    },
                 },
                 scales: {
                     x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#475569' } },
@@ -242,15 +284,21 @@ class InsightOS {
         /* Referrers doughnut */
         this.charts.referrers = new Chart($('referrersChart'), {
             type: 'doughnut',
-            data: { labels: [], datasets: [{ data: [],
-                backgroundColor: ['#7c3aed','#06b6d4','#10b981','#f59e0b','#f43f5e',
-                    '#a855f7','#0891b2','#059669'],
-                borderWidth: 2, borderColor: 'rgba(8,11,18,0.8)', hoverOffset: 6 }] },
+            data: {
+                labels: [], datasets: [{
+                    data: [],
+                    backgroundColor: ['#7c3aed', '#06b6d4', '#10b981', '#f59e0b', '#f43f5e',
+                        '#a855f7', '#0891b2', '#059669'],
+                    borderWidth: 2, borderColor: 'rgba(8,11,18,0.8)', hoverOffset: 6
+                }]
+            },
             options: {
                 responsive: true, maintainAspectRatio: false, cutout: '68%',
                 plugins: {
-                    legend: { position: 'right',
-                        labels: { color: '#94a3b8', boxWidth: 12, padding: 16, font: { size: 13 } } },
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#94a3b8', boxWidth: 12, padding: 16, font: { size: 13 } }
+                    },
                     datalabels: { display: false },
                 },
             },
@@ -288,8 +336,8 @@ class InsightOS {
         // KPI Cards on overview tab
         this.setKPI('kpi-visitors', fmtNum(data.totalVisitors));
         this.setKPI('kpi-pageviews', fmtNum(data.totalPageviews));
-        this.setKPI('kpi-session',   fmtTime(data.avgTime));
-        this.setKPI('kpi-bounce',    data.bounceRate + '%');
+        this.setKPI('kpi-session', fmtTime(data.avgTime));
+        this.setKPI('kpi-bounce', data.bounceRate + '%');
     }
 
     setKPI(id, value) {
@@ -301,8 +349,8 @@ class InsightOS {
         const data = await apiFetch('/api/traffic');
         if (!data) return;
         const ch = this.charts.traffic;
-        ch.data.labels              = data.labels;
-        ch.data.datasets[0].data   = data.data;
+        ch.data.labels = data.labels;
+        ch.data.datasets[0].data = data.data;
         ch.update();
     }
 
@@ -310,8 +358,8 @@ class InsightOS {
         const data = await apiFetch('/api/pages');
         if (!data) return;
         const ch = this.charts.pages;
-        ch.data.labels            = data.labels;
-        ch.data.datasets[0].data  = data.data;
+        ch.data.labels = data.labels;
+        ch.data.datasets[0].data = data.data;
         ch.update();
     }
 
@@ -349,8 +397,8 @@ class InsightOS {
         const data = await apiFetch('/api/realtime');
         if (!data) return;
         const ch = this.charts.realtime;
-        ch.data.labels            = data.labels;
-        ch.data.datasets[0].data  = data.data;
+        ch.data.labels = data.labels;
+        ch.data.datasets[0].data = data.data;
         ch.update('none');
     }
 
@@ -358,7 +406,7 @@ class InsightOS {
         const data = await apiFetch('/api/referrers');
         if (!data) return;
         const ch = this.charts.referrers;
-        ch.data.labels           = data.labels;
+        ch.data.labels = data.labels;
         ch.data.datasets[0].data = data.data;
         ch.update();
     }
@@ -406,7 +454,7 @@ class InsightOS {
 
         const counts = steps.map(s => pageMap[s] || 0);
         const ch = this.charts.funnel;
-        ch.data.labels           = steps;
+        ch.data.labels = steps;
         ch.data.datasets[0].data = counts;
         ch.update();
     }
@@ -441,18 +489,18 @@ class InsightOS {
         this._hmH = h;
 
         const iframe = $('heatmapIframe');
-        const inner  = $('heatmapInner');
+        const inner = $('heatmapInner');
         const canvas = $('heatmapCanvas');
 
         // All three set to identical dimensions — no CSS scaling, pure 1:1
         [iframe, canvas].forEach(el => {
             if (!el) return;
-            el.style.width     = w + 'px';
-            el.style.height    = h + 'px';
+            el.style.width = w + 'px';
+            el.style.height = h + 'px';
             el.style.transform = 'none';
         });
         if (inner) {
-            inner.style.width  = w + 'px';
+            inner.style.width = w + 'px';
             inner.style.height = h + 'px';
         }
     }
@@ -463,10 +511,10 @@ class InsightOS {
         const ctx = canvas.getContext('2d');
 
         const dpr = window.devicePixelRatio || 1;
-        const w   = this._hmW || 1280;
-        const h   = this._hmH || 3400;
+        const w = this._hmW || 1280;
+        const h = this._hmH || 3400;
 
-        canvas.width  = w * dpr;
+        canvas.width = w * dpr;
         canvas.height = h * dpr;
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, w, h);
@@ -482,9 +530,9 @@ class InsightOS {
         // High-fidelity, non-manipulated plotting
         const rad = 25; // Slightly smaller for precision
         const g = ctx.createRadialGradient(absX, absY, 0, absX, absY, rad);
-        g.addColorStop(0,   'rgba(244, 63, 94, 0.5)'); // More transparent
+        g.addColorStop(0, 'rgba(244, 63, 94, 0.5)'); // More transparent
         g.addColorStop(0.5, 'rgba(245, 158, 11, 0.25)');
-        g.addColorStop(1,   'rgba(245, 158, 11, 0)');
+        g.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.beginPath();
         ctx.arc(absX, absY, rad, 0, Math.PI * 2);
         ctx.fillStyle = g;
@@ -506,7 +554,7 @@ class InsightOS {
                 try {
                     const msg = JSON.parse(evt.data);
                     this.handleWSMessage(msg);
-                } catch (_) {}
+                } catch (_) { }
             };
 
             this.ws.onclose = () => {
@@ -567,7 +615,7 @@ class InsightOS {
     spawnMapBlob(page) {
         const container = $('mapBlobs');
         if (!container) return;
-        const colors = ['#7c3aed','#06b6d4','#10b981','#f43f5e','#f59e0b'];
+        const colors = ['#7c3aed', '#06b6d4', '#10b981', '#f43f5e', '#f59e0b'];
         const blob = document.createElement('div');
         blob.className = 'map-blob';
         const size = 12 + Math.random() * 16;

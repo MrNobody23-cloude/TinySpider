@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.js"></script>
     <script src="https://unpkg.com/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2">
     <script>
         // Apply saved theme before paint (prevents flash)
         (function() {
@@ -267,7 +267,7 @@
                     <!-- iframe at real page dimensions (no scaling) so coordinates are 1:1 -->
                     <iframe 
                         id="heatmapIframe"
-                        src="http://localhost:8081"
+                        src="demo-site/"
                         style="width:1280px; height:3400px; border:none; display:block;"
                         title="Demo site heatmap preview"
                         scrolling="no"
@@ -356,7 +356,7 @@
 
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
     <script>
         function copySnippet() {
             const code = `<script src="http://localhost:3001/tracker.js" defer><\/script>`;
